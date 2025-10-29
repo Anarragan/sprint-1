@@ -1,25 +1,41 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { 
+  Entity, 
+  PrimaryGeneratedColumn, 
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinColumn, 
+} from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
-@Entity()
+@Entity({ name: 'tasks' })
 export class Task {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 100 })
   title: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column()
-  date_start: Date;
+  @Column({ default: 'pending' })
+  status: string; // pending | complete
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @ManyToOne(() => User, user => user.tasks, {
+    eager: false,      
+    onDelete: 'CASCADE',  
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column()
-  id_status: number;
-
-  @Column()
-  id_priority: number;
-
-  @Column()
-  id_created_by: number;
+  user_id: number;
 }
