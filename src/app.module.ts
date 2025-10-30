@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import 'dotenv/config';
 
 @Module({
@@ -15,7 +16,7 @@ import 'dotenv/config';
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     synchronize: true,
-  }), TasksModule, UsersModule],
+  }), TasksModule, UsersModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
