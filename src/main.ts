@@ -32,7 +32,3 @@ async function bootstrap() {
   console.log(`Swagger docs on http://localhost:${process.env.PORT}/api`);
 }
 bootstrap();
-
-
-// SUBIR LOS COMMITS POR SEPARADO
-// SUBIR LOS ARCHIVOS COMO DEBE SER

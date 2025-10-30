@@ -2,8 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './task.entity';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
 import { PaginationDto } from './dto/pagination.dto';
 
 @Injectable()
@@ -37,32 +35,5 @@ export class TasksService {
                 totalPages,
             },
         };
-    }
-
-    async findAll(): Promise<Task[]>{
-        return await this.taskRepo.find();
-    }
-
-    async findOne(id: number): Promise<Task> {
-        const task = await this.taskRepo.findOneBy({ id });
-        if (!task) throw new NotFoundException(`Task with ID ${id} not found`);
-        return task;
-    }
-
-    async create(createDto: CreateTaskDto): Promise<Task> {
-        const task = this.taskRepo.create(createDto);
-        return await this.taskRepo.save(task);
-    }
-
-    async update(id: number, updateDto: UpdateTaskDto): Promise<Task> {
-        await this.taskRepo.update(id, updateDto);
-        return this.findOne(id); // volver a cargar y retornar
-    }
-
-    async delete(id: number): Promise<void> {
-        const result = await this.taskRepo.delete(id);
-        if (result.affected === 0) {
-            throw new NotFoundException(`Task with ID ${id} not found`)
-        }
     }
 }
