@@ -1,98 +1,233 @@
+# Task Manager API
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A robust REST API for task management built with NestJS, featuring JWT authentication, user management, and comprehensive task operations.
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a Task Manager API built with NestJS that provides a complete backend solution for managing tasks with user authentication. The API includes user registration/login, JWT-based authentication, and full CRUD operations for tasks with user-specific access control.
 
-## Project setup
+## Features
 
+- **User Authentication**: Registration and login with JWT tokens
+- **Task Management**: Create, read, update, and delete tasks
+- **User-specific Tasks**: Each user can only access their own tasks
+- **Data Validation**: Input validation using class-validator
+- **API Documentation**: Interactive Swagger/OpenAPI documentation
+- **Database Integration**: PostgreSQL with TypeORM
+- **Security**: Password hashing with bcrypt
+- **Modern Architecture**: Clean, modular NestJS structure
+
+## Tech Stack
+
+- **Framework**: NestJS
+- **Language**: TypeScript
+- **Database**: PostgreSQL
+- **ORM**: TypeORM
+- **Authentication**: JWT (JSON Web Tokens)
+- **Password Hashing**: bcrypt
+- **Validation**: class-validator & class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Testing**: Jest
+
+## Prerequisites
+
+Before running this application, make sure you have:
+
+- Node.js (v16 or higher)
+- npm or yarn
+- PostgreSQL database
+
+## Environment Setup
+
+1. Copy the environment example file:
 ```bash
-$ npm install
+cp .env.example .env
 ```
 
-## Compile and run the project
+2. Configure your environment variables in `.env`:
+```env
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=your_password_here
+DB_DATABASE=task_manager
 
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_here_change_in_production
+JWT_EXPIRATION=1d
+
+# Application
+PORT=3000
+NODE_ENV=development
+```
+
+## Installation & Running
+
+1. Install dependencies:
 ```bash
-# development
-$ npm run start
+npm install
+```
 
-# watch mode
-$ npm run start:dev
+2. Set up your PostgreSQL database and configure the `.env` file
+
+3. Run the application:
+```bash
+# development mode
+npm run start
+
+# watch mode (recommended for development)
+npm run start:dev
 
 # production mode
-$ npm run start:prod
+npm run start:prod
 ```
 
-## Run tests
+The application will be available at:
+- **API**: `http://localhost:3000`
+- **Swagger Documentation**: `http://localhost:3000/api`
+
+## API Endpoints
+
+### Authentication
+- `POST /auth/register` - Register a new user
+- `POST /auth/login` - Login user and get JWT token
+
+### Tasks (Protected routes - require JWT token)
+- `GET /tasks` - Get all tasks for the authenticated user
+- `POST /tasks` - Create a new task
+- `GET /tasks/:id` - Get a specific task by ID
+- `PUT /tasks/:id` - Update a task
+- `DELETE /tasks/:id` - Delete a task
+
+### Request/Response Examples
+
+#### Register User
+```bash
+POST /auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
+
+#### Login
+```bash
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
+
+#### Create Task (requires Authorization header)
+```bash
+POST /tasks
+Authorization: Bearer <your-jwt-token>
+Content-Type: application/json
+
+{
+  "title": "Complete project documentation",
+  "description": "Write comprehensive README and API docs",
+  "completed": false
+}
+```
+
+## Testing
 
 ```bash
 # unit tests
-$ npm run test
+npm run test
 
 # e2e tests
-$ npm run test:e2e
+npm run test:e2e
 
 # test coverage
-$ npm run test:cov
+npm run test:cov
+
+# watch mode for tests
+npm run test:watch
 ```
 
-## Deployment
+## Project Structure
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```
+src/
+├── auth/                 # Authentication module
+│   ├── dto/             # Data Transfer Objects
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   ├── auth.module.ts
+│   └── jwt.strategy.ts  # JWT authentication strategy
+├── tasks/               # Tasks module
+│   ├── dto/            # Data Transfer Objects
+│   ├── task.entity.ts  # Task database entity
+│   ├── tasks.controller.ts
+│   ├── tasks.service.ts
+│   └── tasks.module.ts
+├── users/              # Users module
+│   ├── user.entity.ts  # User database entity
+│   ├── users.service.ts
+│   └── users.module.ts
+├── app.module.ts       # Root application module
+└── main.ts            # Application entry point
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Database Schema
 
-## Resources
+### Users Table
+- `id` (Primary Key)
+- `name` (string, max 100 chars)
+- `email` (string, unique, max 100 chars)
+- `password` (string, hashed, max 100 chars)
 
-Check out a few resources that may come in handy when working with NestJS:
+### Tasks Table
+- `id` (Primary Key)
+- `title` (string, max 200 chars)
+- `description` (text, optional)
+- `completed` (boolean, default: false)
+- `user_id` (Foreign Key to Users)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Security Features
 
-## Support
+- **Password Hashing**: All passwords are hashed using bcrypt
+- **JWT Authentication**: Secure token-based authentication
+- **Input Validation**: All inputs are validated using class-validator
+- **Route Protection**: Protected routes require valid JWT tokens
+- **User Isolation**: Users can only access their own tasks
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Development Guidelines
 
-## Stay in touch
+1. **Code Style**: Follow the established ESLint and Prettier configurations
+2. **Testing**: Write unit tests for services and controllers
+3. **Documentation**: Update Swagger decorators when adding new endpoints
+4. **Environment Variables**: Never commit sensitive data; use environment variables
+5. **Database Migrations**: Use TypeORM migrations for database schema changes
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Resources
+
+- [NestJS Documentation](https://docs.nestjs.com)
+- [TypeORM Documentation](https://typeorm.io/)
+- [JWT.io](https://jwt.io/) - JWT token debugger
+- [Swagger/OpenAPI](https://swagger.io/) - API documentation
